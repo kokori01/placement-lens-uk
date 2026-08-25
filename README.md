@@ -124,6 +124,11 @@ PYTHONPATH=src .venv/bin/python -m placement_lens.cli merge-jobs \
 `examples/candidate.demo.json` is fictional. A real CV-derived profile should remain under `data/private/` and must not contain contact details.
 
 ```bash
+cp examples/candidate.demo.json data/private/candidate.local.json
+# Edit only skills, target levels/title terms and evidence; omit contact details.
+```
+
+```bash
 PYTHONPATH=src .venv/bin/python -m placement_lens.cli rank \
   --candidate data/private/candidate.local.json \
   --jobs data/processed/jobs_combined_since_2026.json \
