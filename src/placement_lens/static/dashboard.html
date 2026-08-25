@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PlacementLens UK explainable data-career intelligence dashboard">
+  <title>PlacementLens UK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #150f23;
+      --surface: #1f1633;
+      --surface-2: #281d40;
+      --border: #3d3157;
+      --text: #ffffff;
+      --muted: #bcb5ca;
+      --purple: #8b7bd0;
+      --lime: #c2ef4e;
+      --coral: #ffb287;
+      --pink: #fa7faa;
+      --shadow: rgba(7, 3, 13, .35) 0 14px 34px -18px;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: "Rubik", system-ui, -apple-system, sans-serif;
+    }
+    a { color: inherit; }
+    button, select { font: inherit; }
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(61, 49, 87, .75);
+      background: rgba(21, 15, 35, .88);
+      backdrop-filter: blur(18px) saturate(150%);
+    }
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 600; }
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #584674;
+      border-radius: 10px;
+      color: var(--lime);
+      background: #2d2047;
+      font-family: "JetBrains Mono", monospace;
+      box-shadow: inset rgba(0, 0, 0, .18) 0 1px 4px;
+    }
+    .status { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgba(194, 239, 78, .1); }
+    main { padding: 54px 0 80px; }
+    .eyebrow, .section-label, label {
+      color: var(--lime);
+      font-size: 11px;
+      line-height: 1.8;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    h1 { max-width: 760px; margin: 10px 0 14px; font-size: clamp(38px, 6vw, 66px); line-height: 1.03; letter-spacing: -.035em; }
+    .intro { max-width: 700px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.65; }
+    .data-note { margin-top: 20px; color: var(--muted); font-size: 12px; font-family: "JetBrains Mono", monospace; }
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 34px 0 54px; }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .kpi { min-height: 132px; padding: 20px; position: relative; overflow: hidden; }
+    .kpi::after { content: ""; position: absolute; width: 58px; height: 4px; left: 20px; bottom: 0; background: var(--purple); border-radius: 4px 4px 0 0; }
+    .kpi:nth-child(1)::after { background: var(--lime); }
+    .kpi:nth-child(3)::after { background: var(--coral); }
+    .kpi-value { margin-top: 15px; font: 500 34px/1 "JetBrains Mono", monospace; }
+    .kpi-detail { margin-top: 9px; color: var(--muted); font-size: 12px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin: 0 0 18px; }
+    h2 { margin: 5px 0 0; font-size: 25px; letter-spacing: -.02em; }
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 54px; }
+    .panel { padding: 22px; }
+    .bar-list { display: grid; gap: 12px; margin-top: 22px; }
+    .bar-row { display: grid; grid-template-columns: minmax(105px, 145px) 1fr 34px; align-items: center; gap: 12px; font-size: 13px; }
+    .bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track { height: 8px; border-radius: 8px; background: #362d59; overflow: hidden; }
+    .fill { height: 100%; border-radius: inherit; background: var(--purple); transition: width .35s ease; }
+    .gaps .fill { background: var(--coral); }
+    .count { color: var(--muted); text-align: right; font-family: "JetBrains Mono", monospace; }
+    .filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+    .field { display: grid; gap: 5px; }
+    select {
+      min-width: 148px;
+      height: 40px;
+      border: 1px solid #584674;
+      border-radius: 8px;
+      padding: 0 34px 0 12px;
+      color: var(--text);
+      background: #2d2047;
+    }
+    button {
+      height: 40px;
+      border: 1px solid #584674;
+      border-radius: 10px;
+      padding: 0 16px;
+      color: #191126;
+      background: var(--lime);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: inset rgba(0, 0, 0, .12) 0 1px 3px;
+    }
+    button:hover { box-shadow: rgba(0, 0, 0, .25) 0 8px 22px; transform: translateY(-1px); }
+    .job-list { display: grid; gap: 12px; margin-top: 18px; }
+    .job { padding: 20px; display: grid; grid-template-columns: 68px minmax(0, 1fr) auto; gap: 18px; align-items: start; }
+    .score { width: 68px; height: 68px; border: 1px solid #584674; border-radius: 12px; display: grid; place-items: center; background: #2a1e42; }
+    .score strong { font: 500 20px/1 "JetBrains Mono", monospace; color: var(--lime); }
+    .score span { display: block; color: var(--muted); font-size: 9px; text-align: center; margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+    .job h3 { margin: 0 0 5px; font-size: 18px; line-height: 1.35; }
+    .meta { color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .badges, .skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+    .badge { border: 1px solid var(--border); border-radius: 999px; padding: 5px 9px; color: #d9d3e3; background: #291e40; font-size: 11px; }
+    .skill-match { color: var(--lime); border-color: rgba(194, 239, 78, .35); }
+    .skill-gap { color: var(--coral); border-color: rgba(255, 178, 135, .35); }
+    .source-link { align-self: center; border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; color: var(--text); text-decoration: none; font-size: 12px; white-space: nowrap; }
+    .source-link:hover { border-color: var(--purple); color: var(--lime); }
+    .components { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; color: var(--muted); font: 11px/1.5 "JetBrains Mono", monospace; }
+    .empty, .error { padding: 28px; color: var(--muted); text-align: center; }
+    footer { border-top: 1px solid var(--border); padding: 24px 0 36px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    footer code { color: var(--lime); font-family: "JetBrains Mono", monospace; }
+    @media (max-width: 900px) {
+      .kpis { grid-template-columns: 1fr 1fr; }
+      .analytics-grid { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; }
+      .job { grid-template-columns: 60px minmax(0, 1fr); }
+      .source-link { grid-column: 2; justify-self: start; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 22px, 1180px); }
+      main { padding-top: 36px; }
+      .kpis { grid-template-columns: 1fr; }
+      .job { padding: 15px; grid-template-columns: 1fr; }
+      .score { width: 100%; height: 48px; display: flex; gap: 7px; }
+      .source-link { grid-column: 1; }
+      .filters, .field, select, button { width: 100%; }
+      .bar-row { grid-template-columns: 100px 1fr 28px; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand"><div class="mark">PL</div><span>PlacementLens UK</span></div>
+      <div class="status"><span class="dot" id="health-dot"></span><span id="health-text">Checking data</span></div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section aria-labelledby="page-title">
+      <div class="eyebrow">Explainable career intelligence</div>
+      <h1 id="page-title">Find the signal in the UK data job market.</h1>
+      <p class="intro">A CV-grounded ranking system combining weighted skill coverage, evidence confidence, role fit, seniority fit and TF-IDF text similarity.</p>
+      <p class="data-note" id="freshness">Loading provenance...</p>
+    </section>
+
+    <section class="kpis" aria-label="Summary metrics">
+      <article class="card kpi"><div class="section-label">Indexed jobs</div><div class="kpi-value" id="total-jobs">—</div><div class="kpi-detail">Deduplicated adverts with source URLs</div></article>
+      <article class="card kpi"><div class="section-label">Data sources</div><div class="kpi-value" id="sources">—</div><div class="kpi-detail">Documented public APIs</div></article>
+      <article class="card kpi"><div class="section-label">Target-level jobs</div><div class="kpi-value" id="target-jobs">—</div><div class="kpi-detail">Internship and entry level</div></article>
+      <article class="card kpi"><div class="section-label">Top fit score</div><div class="kpi-value" id="top-score">—</div><div class="kpi-detail" id="average-score">Average —</div></article>
+    </section>
+
+    <section aria-labelledby="market-heading">
+      <div class="section-head"><div><div class="section-label">Market intelligence</div><h2 id="market-heading">Demand and candidate gaps</h2></div></div>
+      <div class="analytics-grid">
+        <article class="card panel"><div class="section-label">Advert frequency</div><h2>Most demanded skills</h2><div class="bar-list" id="skills-chart"></div></article>
+        <article class="card panel gaps"><div class="section-label">Learning roadmap</div><h2>Most frequent missing skills</h2><div class="bar-list" id="gaps-chart"></div></article>
+      </div>
+    </section>
+
+    <section aria-labelledby="jobs-heading">
+      <div class="section-head">
+        <div><div class="section-label">Explainable ranking</div><h2 id="jobs-heading">Recommended opportunities</h2></div>
+        <form class="filters" id="filters">
+          <div class="field"><label for="source">Source</label><select id="source"><option value="">All sources</option><option>The Muse</option><option>Jobicy</option><option>Greenhouse</option></select></div>
+          <div class="field"><label for="level">Level</label><select id="level"><option value="">All levels</option><option>Internship</option><option>Entry Level</option><option>Unspecified</option><option>Mid Level</option><option>Senior Level</option></select></div>
+          <button type="submit">Apply filters</button>
+        </form>
+      </div>
+      <div class="job-list" id="job-list"><div class="card empty">Loading ranked jobs...</div></div>
+    </section>
+  </main>
+
+  <footer><div class="shell">Live API-backed portfolio artifact. Ranking model: <code>hybrid-v1</code>. Scores support decisions; they do not guarantee eligibility or vacancy status. Every advert links to its original source.</div></footer>
+
+  <script>
+    const api = {
+      summary: "/api/summary",
+      skills: "/api/skills?limit=12",
+      gaps: "/api/gaps?limit=12",
+      jobs: "/api/jobs"
+    };
+
+    const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+    const safeUrl = value => /^https?:\/\//i.test(value || "") ? value : "#";
+
+    function renderBars(id, rows) {
+      const container = document.getElementById(id);
+      const max = Math.max(...rows.map(row => row.count), 1);
+      container.innerHTML = rows.map(row => `
+        <div class="bar-row">
+          <div class="bar-label" title="${escapeHtml(row.skill)}">${escapeHtml(row.skill)}</div>
+          <div class="track"><div class="fill" style="width:${(row.count / max) * 100}%"></div></div>
+          <div class="count">${row.count}</div>
+        </div>`).join("");
+    }
+
+    function badge(text, className = "") {
+      return `<span class="badge ${className}">${escapeHtml(text)}</span>`;
+    }
+
+    function renderJobs(rows) {
+      const container = document.getElementById("job-list");
+      if (!rows.length) {
+        container.innerHTML = '<div class="card empty">No opportunities match these filters.</div>';
+        return;
+      }
+      container.innerHTML = rows.map(job => `
+        <article class="card job">
+          <div class="score"><div><strong>${job.score.toFixed(1)}</strong><span>fit score</span></div></div>
+          <div>
+            <h3>${escapeHtml(job.title)}</h3>
+            <div class="meta">${escapeHtml(job.company)} · ${escapeHtml(job.location)} · Rank #${job.rank}</div>
+            <div class="badges">
+              ${badge(job.source)}
+              ${job.levels.map(level => badge(level)).join("")}
+              ${badge(`${job.timestamp_kind === "updated" ? "Updated" : "Published"} ${job.published_at.slice(0, 10)}`)}
+            </div>
+            <div class="skills">
+              ${job.matched_skills.map(skill => badge(`✓ ${skill}`, "skill-match")).join("")}
+              ${job.missing_skills.map(skill => badge(`△ ${skill}`, "skill-gap")).join("")}
+            </div>
+            <div class="components">
+              <span>skill ${job.skill_score.toFixed(1)}</span>
+              <span>title ${job.title_score.toFixed(1)}</span>
+              <span>text ${job.text_score.toFixed(1)}</span>
+              <span>level ${job.level_score.toFixed(1)}</span>
+            </div>
+          </div>
+          <a class="source-link" href="${escapeHtml(safeUrl(job.source_url))}" target="_blank" rel="noopener noreferrer">View source ↗</a>
+        </article>`).join("");
+    }
+
+    async function loadJobs() {
+      const params = new URLSearchParams({limit: "40"});
+      const source = document.getElementById("source").value;
+      const level = document.getElementById("level").value;
+      if (source) params.set("source", source);
+      if (level) params.set("level", level);
+      const response = await fetch(`${api.jobs}?${params}`);
+      if (!response.ok) throw new Error("Jobs API unavailable");
+      renderJobs((await response.json()).jobs);
+    }
+
+    async function initialize() {
+      try {
+        const [summaryResponse, skillsResponse, gapsResponse, healthResponse] = await Promise.all([
+          fetch(api.summary), fetch(api.skills), fetch(api.gaps), fetch("/api/health")
+        ]);
+        if (![summaryResponse, skillsResponse, gapsResponse, healthResponse].every(response => response.ok)) throw new Error("Analytics API unavailable");
+        const [summary, skills, gaps, health] = await Promise.all([
+          summaryResponse.json(), skillsResponse.json(), gapsResponse.json(), healthResponse.json()
+        ]);
+        document.getElementById("total-jobs").textContent = summary.total_jobs;
+        document.getElementById("sources").textContent = summary.sources;
+        document.getElementById("target-jobs").textContent = summary.target_level_jobs;
+        document.getElementById("top-score").textContent = `${summary.top_score.toFixed(1)}%`;
+        document.getElementById("average-score").textContent = `Average ${summary.average_score.toFixed(1)}%`;
+        document.getElementById("freshness").textContent = `Latest source timestamp: ${summary.latest_publication} · Ranking run #${summary.run_id}`;
+        document.getElementById("health-text").textContent = `${health.jobs} records ready`;
+        renderBars("skills-chart", skills);
+        renderBars("gaps-chart", gaps);
+        await loadJobs();
+      } catch (error) {
+        document.getElementById("health-dot").style.background = "var(--pink)";
+        document.getElementById("health-text").textContent = "Data unavailable";
+        document.getElementById("job-list").innerHTML = `<div class="card error">${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    document.getElementById("filters").addEventListener("submit", event => {
+      event.preventDefault();
+      loadJobs().catch(error => document.getElementById("job-list").innerHTML = `<div class="card error">${escapeHtml(error.message)}</div>`);
+    });
+    initialize();
+  </script>
+</body>
+</html>

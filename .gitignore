@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.coverage
+htmlcov/
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+.DS_Store
+output/
+data/raw/*.json
+data/processed/*.json
+data/processed/*.db
+data/private/
+.hermes/desktop-attachments/

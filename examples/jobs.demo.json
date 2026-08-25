@@ -1,0 +1,38 @@
+[
+  {
+    "id": "demo-london-001",
+    "title": "Data Science Placement",
+    "company": "Fictional Analytics Ltd",
+    "description": "Required skills: Python, SQL, scikit-learn and AWS.",
+    "location": "London, United Kingdom",
+    "levels": ["Internship"],
+    "source": "Demo",
+    "source_url": "https://example.com/jobs/demo-london-001",
+    "published_at": "2026-07-20T09:00:00Z",
+    "timestamp_kind": "published"
+  },
+  {
+    "id": "demo-london-002",
+    "title": "BI Data Analyst Placement",
+    "company": "Example Retail Group",
+    "description": "The role requires SQL, Power BI and PostgreSQL.",
+    "location": "Manchester, United Kingdom",
+    "levels": ["Entry Level"],
+    "source": "Demo",
+    "source_url": "https://example.com/jobs/demo-london-002",
+    "published_at": "2026-07-21T09:00:00Z",
+    "timestamp_kind": "published"
+  },
+  {
+    "id": "demo-london-003",
+    "title": "Machine Learning Engineering Placement",
+    "company": "Sample AI Labs",
+    "description": "You will work with Python, PyTorch and Amazon Web Services.",
+    "location": "Remote, United Kingdom",
+    "levels": ["Internship"],
+    "source": "Demo",
+    "source_url": "https://example.com/jobs/demo-london-003",
+    "published_at": "2026-07-22T09:00:00Z",
+    "timestamp_kind": "published"
+  }
+]

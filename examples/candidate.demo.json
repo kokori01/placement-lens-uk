@@ -1,0 +1,21 @@
+{
+  "candidate_id": "candidate-demo",
+  "target_location": "London, United Kingdom",
+  "target_levels": [
+    "Internship",
+    "Entry Level"
+  ],
+  "preferred_title_terms": [
+    "data scientist",
+    "data analyst",
+    "machine learning engineer"
+  ],
+  "profile_text": "Data science candidate with Python, SQL, Power BI, scikit-learn and PostgreSQL project experience.",
+  "skills": [
+    "Python",
+    "SQL",
+    "Power BI",
+    "scikit-learn",
+    "PostgreSQL"
+  ]
+}
